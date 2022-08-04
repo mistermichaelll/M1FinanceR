@@ -1,5 +1,7 @@
 #' Get the current positions in your portfolio.
 #'
+#' @param account_number a user's M1 Finance account number.
+#'
 #' @details
 #' This function returns top-level information about a user's portfolio, including the market value
 #' and the number of shares they own.

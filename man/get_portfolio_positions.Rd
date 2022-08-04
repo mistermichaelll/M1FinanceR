@@ -6,6 +6,9 @@
 \usage{
 get_portfolio_positions(account_number)
 }
+\arguments{
+\item{account_number}{a user's M1 Finance account number.}
+}
 \description{
 Get the current positions in your portfolio.
 }
