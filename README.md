@@ -1,2 +1,66 @@
-# m1financeR
-R package for interacting with APEX Clearing's API, intended for use with M1 Finance but potentially extendable to other institutions which use APEX as a clearinghouse.
+# m1financeR - analyze your M1 Finance portfolio in R
+M1 Finance does not have its own API through which they can access and download things like realized/unrealized gain. According to M1 Finance:
+
+> While M1 does not have realized gain information on the app or website, you can view this information on our clearing firm, Apex Corporation's website. 
+
+`m1financeR` provides a set of functions that make it easy to import your M1 Finance data into R for analysis via an opinionated wrapper to APEX Clearing's individual account API. Using this package, you can access your account information through a set of intuitive functions instead of manual CSV downloads.
+
+# Installation
+Install the development version of `m1financeR` with `devtools`:
+
+```R
+devtools::install_github("mistermichaelll/m1financeR")
+```
+
+# Setup
+You will need to create an account with [APEX Clearing](https://www.apexclearing.com/)--this is M1 Finance's clearing firm and custodial bank. You can access all of your account information from here. 
+
+Once you have your username and password, and `m1financeR` installed, you're ready to use the package.
+
+## Authentication 
+At the beginning of your script, call the `get_APEX_auth_token()` function. 
+
+If you are using RStudio, leaving the arguments to this function blank will prompt you to enter your username and password. The function will create an environment variable called `APEX_token` which is used for authentication.
+
+Optionally, you can define your username and password directly in the function arguments. **I highly recommend looking into alternatives to writing these in plaintext in an .R file.** For example, [Keyring](https://github.com/r-lib/keyring) is an option for managing secrets in R.
+
+# Example of Use
+```R
+## libraries ----
+library(m1financeR)
+library(dplyr)
+
+## authenticate ----
+get_APEX_auth_token(username = "myprettyusername1", password = "pleasedontwritethisinplaintext9")
+
+## get the realized gains/losses for your portfolio -----
+realized_gain_loss <- get_realized_gains_losses("AB1234")
+
+realized_gain_loss |> 
+    group_by(symbol) |> 
+    summarize(total_gain_loss = sum(short_term_gain_loss + long_term_gain_loss, na.rm = T)) |> 
+    head(10)
+    
+#> # A tibble: 10 × 2
+#> symbol     total_gain_loss
+#> <chr>               <dbl>
+#> 1 VTI               174. 
+#> 2 AAPL              50.1
+#> 3 GOOG              44.3
+#> 4 MELI              35.9
+#> 5 MSFT              32.2
+#> 6 DIS               30.6
+#> 7 AMZN              30.0
+#> 8 SQ                29.9
+#> 9 SBUX              16.7
+#> 10 TGT              15.9       
+```
+
+# A Note on Breaking Changes
+## This Package is Actively Under Development!
+I'll try not to break things as I move along.
+
+## APEX Clearing's API Support
+APEX's Individual API is not publicly documented. This package was constructed through careful analysis of network activity when accessing APEX's site. 
+
+Thus, it is entirely possible that APEX may introduce a breaking change to the API in the future. Please keep this in mind as you write scripts based on this package. 
