@@ -26,40 +26,38 @@ get_realized_gains_losses <- function(account_number){
         parse_json()
 
     buys <-
-        suppressWarnings(
-            response_json["lot"] |>
-            map_depth(
-                2, ~tibble(
-                    "symbol" = .x[["security"]][["symbol"]],
-                    "description" = .x[["security"]][["description"]] |> purrr::flatten_chr(),
-                    "buy_sell" = "BUY",
-                    "trade_date" = .x[["buy"]][["tradeDate"]],
-                    "unit_price" = .x[["buy"]][["unitPrice"]],
-                    "quantity" = .x[["buy"]][["quantity"]]
-                )
-            ) |>
-            bind_rows() |>
-            mutate(total_cost = unit_price * quantity)
-        )
+        response_json |>
+        pluck("lot") |>
+        map_depth(1,
+                  ~(pluck(.x, "buy") |>
+                        flatten_df() |>
+                        mutate(
+                            symbol = pluck(.x, "security", "symbol"),
+                            buy_sell = "BUY",
+                            long_short = pluck(.x, "longShortInd")
+                        )
+                  ) |>
+                      relocate(buy_sell, symbol)
+        ) |>
+        bind_rows()
 
     sells <-
-        suppressWarnings(
-            response_json["lot"] |>
-            map_depth(
-                2, ~tibble(
-                    "symbol" = .x[["security"]][["symbol"]],
-                    "description" = .x[["security"]][["description"]] |> purrr::flatten_chr(),
-                    "buy_sell" = "SELL",
-                    "trade_date" = .x[["sell"]][["tradeDate"]],
-                    "unit_price" = .x[["sell"]][["unitPrice"]],
-                    "quantity" = .x[["sell"]][["quantity"]],
-                    "short_term_gain_loss" = .x[["stGainLoss"]],
-                    "long_term_gain_loss" = .x[["ltGainLoss"]]
-                )
-            ) |>
-            bind_rows() |>
-            mutate(total_cost = unit_price * quantity)
-        )
+        response_json |>
+        pluck("lot") |>
+        map_depth(1,
+                  ~(pluck(.x, "sell") |>
+                        flatten_df() |>
+                        mutate(
+                            symbol = pluck(.x, "security", "symbol"),
+                            buy_sell = "SELL",
+                            long_short = pluck(.x, "longShortInd"),
+                            short_term_gain_loss = pluck(.x, "stGainLoss"),
+                            long_term_gain_loss = pluck(.x, "ltGainLoss")
+                        )
+                  ) |>
+                      relocate(buy_sell, symbol)
+        ) |>
+        bind_rows()
 
     realized_gain_loss_df <- bind_rows(buys, sells)
 
@@ -95,22 +93,19 @@ get_open_positions <- function(account_number){
 
 
     open_positions <-
-        suppressWarnings(
-            response_json["lot"] |>
-            map_depth(
-                2, ~tibble(
-                    "symbol" = .x[["security"]][["symbol"]],
-                    "description" = .x[["security"]][["description"]] |> purrr::flatten_chr(),
-                    "buy_sell" = "BUY",
-                    "trade_date" = .x[["buy"]][["tradeDate"]],
-                    "unit_price" = .x[["buy"]][["unitPrice"]],
-                    "quantity" = .x[["buy"]][["quantity"]]
-                )
-            ) |>
-            bind_rows() |>
-            mutate(total_cost = unit_price * quantity) |>
-            filter(unit_price > 0)
-        )
+        response_json |>
+        pluck("lot") |>
+        map_depth(1,
+                  ~(pluck(.x, "buy") |>
+                        flatten_df() |>
+                        mutate(
+                            symbol = pluck(.x, "security", "symbol"),
+                            buy_sell = "BUY"
+                            )
+                  ) |>
+                      relocate(buy_sell, symbol)
+        ) |>
+        bind_rows()
 
     return(open_positions)
 }
