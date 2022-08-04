@@ -31,18 +31,9 @@ get_portfolio_positions <- function(account_number){
         parse_json()
 
     portfolio_positions <-
-        response_json[[1]][["positions"]] |>
-        map_depth(
-            1, ~tibble(
-                "symbol" = .x[[1]],
-                "name" = .x[[5]],
-                "num_shares" = .x[[8]],
-                "market_price" = .x[[9]],
-                "market_value" = .x[[10]]
-            )
-        ) |>
-        bind_rows() |>
-        filter(market_value > 0)
+        response_json|>
+        pluck(1, "positions") |>
+        map_df(flatten_df)
 
 
     return(portfolio_positions)
