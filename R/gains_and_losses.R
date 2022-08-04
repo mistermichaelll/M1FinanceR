@@ -85,22 +85,17 @@ get_open_positions <- function(account_number){
 
 
     open_positions <-
-        suppressWarnings(
-            response_json["lot"] |>
-            map_depth(
-                2, ~tibble(
-                    "symbol" = .x[["security"]][["symbol"]],
-                    "description" = .x[["security"]][["description"]] |> purrr::flatten_chr(),
-                    "buy_sell" = "BUY",
-                    "trade_date" = .x[["buy"]][["tradeDate"]],
-                    "unit_price" = .x[["buy"]][["unitPrice"]],
-                    "quantity" = .x[["buy"]][["quantity"]]
-                )
-            ) |>
-            bind_rows() |>
-            mutate(total_cost = unit_price * quantity) |>
-            filter(unit_price > 0)
-        )
+        response_json |>
+        pluck("lot") |>
+        map_depth(1,
+                  ~(pluck(.x, "buy") |>
+                        flatten_df() |>
+                        mutate(symbol = pluck(.x, "security", "symbol"),
+                               buy_sell = "BUY")
+                  ) |>
+                      relocate(buy_sell, symbol)
+        ) |>
+        bind_rows()
 
     return(open_positions)
 }
