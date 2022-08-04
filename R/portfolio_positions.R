@@ -15,14 +15,21 @@ get_portfolio_positions <- function(account_number){
             add_headers(
                 Cookie = Sys.getenv("APEX_token"),
                 ContentType = "application/json;charset=UTF-8"
+                )
             )
-        ) |>
-        content(as = "text") |>
-        parse_json()
         )
 
+    if(response$status_code != 200){
+        stop(sprintf("ERROR: portfolio pull was unsuccessful, status code %s. Are you sure your account number is correct?", response$status_code))
+    }
+
+    response_json <-
+        response |>
+        content(as = "text") |>
+        parse_json()
+
     portfolio_positions <-
-        response[[1]][["positions"]] |>
+        response_json[[1]][["positions"]] |>
         map_depth(
             1, ~tibble(
                 "symbol" = .x[[1]],
