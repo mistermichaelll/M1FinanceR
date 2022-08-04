@@ -1,5 +1,5 @@
 # m1financeR - analyze your M1 Finance portfolio in R
-M1 Finance does not have its own API through which users can access and download things like realized/unrealized gain. According to M1 Finance:
+[M1 Finance](https://www.m1finance.com/) does not have its own API through which users can access and download things like realized/unrealized gain. According to M1 Finance:
 
 > While M1 does not have realized gain information on the app or website, you can view this information on our clearing firm, Apex Corporation's website. 
 
@@ -55,6 +55,9 @@ realized_gain_loss |>
 #> 9 SBUX              16.7
 #> 10 TGT              15.9       
 ```
+
+# Extendability to Other Brokers
+Though the intended use of this package is for users of M1 Finance, this package is a wrapper to the APEX Clearing API. That means if APEX is your broker's clearing firm and custodial bank, it's likely that this package will operate in the same way for that broker.
 
 # A Note on Breaking Changes
 ## This Package is Actively Under Development!
