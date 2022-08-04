@@ -26,11 +26,9 @@ get_portfolio_positions <- function(account_number){
     }
 
     response_json <-
-        suppressMessages(
         response |>
-        content(as = "text") |>
+        content(as = "text", encoding = "UTF-8") |>
         parse_json()
-        )
 
     portfolio_positions <-
         response_json[[1]][["positions"]] |>
