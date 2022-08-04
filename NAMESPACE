@@ -1,1 +1,4 @@
-exportPattern("^[[:alpha:]]+")
+import(httr)
+import(dplyr)
+import(purrr)
+export(get_APEX_auth_token)
