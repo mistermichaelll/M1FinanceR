@@ -33,7 +33,8 @@ get_realized_gains_losses <- function(account_number){
                         flatten_df() |>
                         mutate(
                             symbol = pluck(.x, "security", "symbol"),
-                            buy_sell = "BUY"
+                            buy_sell = "BUY",
+                            long_short = pluck(.x, "longShortInd")
                         )
                   ) |>
                       relocate(buy_sell, symbol)
@@ -49,6 +50,7 @@ get_realized_gains_losses <- function(account_number){
                         mutate(
                             symbol = pluck(.x, "security", "symbol"),
                             buy_sell = "SELL",
+                            long_short = pluck(.x, "longShortInd"),
                             short_term_gain_loss = pluck(.x, "stGainLoss"),
                             long_term_gain_loss = pluck(.x, "ltGainLoss")
                         )
