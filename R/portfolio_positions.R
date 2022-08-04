@@ -35,6 +35,5 @@ get_portfolio_positions <- function(account_number){
         pluck(1, "positions") |>
         map_df(flatten_df)
 
-
     return(portfolio_positions)
 }
