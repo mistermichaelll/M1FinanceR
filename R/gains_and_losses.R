@@ -31,8 +31,10 @@ get_realized_gains_losses <- function(account_number){
         map_depth(1,
                   ~(pluck(.x, "buy") |>
                         flatten_df() |>
-                        mutate(symbol = pluck(.x, "security", "symbol"),
-                               buy_sell = "BUY")
+                        mutate(
+                            symbol = pluck(.x, "security", "symbol"),
+                            buy_sell = "BUY"
+                        )
                   ) |>
                       relocate(buy_sell, symbol)
         ) |>
@@ -44,8 +46,12 @@ get_realized_gains_losses <- function(account_number){
         map_depth(1,
                   ~(pluck(.x, "sell") |>
                         flatten_df() |>
-                        mutate(symbol = pluck(.x, "security", "symbol"),
-                               buy_sell = "SELL")
+                        mutate(
+                            symbol = pluck(.x, "security", "symbol"),
+                            buy_sell = "SELL",
+                            short_term_gain_loss = pluck(.x, "stGainLoss"),
+                            long_term_gain_loss = pluck(.x, "ltGainLoss")
+                        )
                   ) |>
                       relocate(buy_sell, symbol)
         ) |>
@@ -90,8 +96,10 @@ get_open_positions <- function(account_number){
         map_depth(1,
                   ~(pluck(.x, "buy") |>
                         flatten_df() |>
-                        mutate(symbol = pluck(.x, "security", "symbol"),
-                               buy_sell = "BUY")
+                        mutate(
+                            symbol = pluck(.x, "security", "symbol"),
+                            buy_sell = "BUY"
+                            )
                   ) |>
                       relocate(buy_sell, symbol)
         ) |>
