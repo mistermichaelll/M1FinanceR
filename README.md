@@ -1,5 +1,5 @@
 # m1financeR - analyze your M1 Finance portfolio in R
-M1 Finance does not have its own API through which they can access and download things like realized/unrealized gain. According to M1 Finance:
+M1 Finance does not have its own API through which users can access and download things like realized/unrealized gain. According to M1 Finance:
 
 > While M1 does not have realized gain information on the app or website, you can view this information on our clearing firm, Apex Corporation's website. 
 
