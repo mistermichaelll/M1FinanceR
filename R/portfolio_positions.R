@@ -31,7 +31,7 @@ get_portfolio_positions <- function(account_number){
         parse_json()
 
     portfolio_positions <-
-        response_json|>
+        response_json |>
         pluck(1, "positions") |>
         map_df(flatten_df)
 
