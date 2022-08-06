@@ -26,24 +26,13 @@ get_account_activity <- function(account_number, start_date, end_date){
         parse_json()
 
     account_activity_df <-
-        response_json |>
-        map_depth(1,
-                  ~tibble(
-                      "action_timestamp" = .x[[1]],
-                      "symbol" = .x[["symbol"]],
-                      "name" = .x[[5]],
-                      "activity_type" = .x[[18]],
-                      "trade_action" = .x[[7]],
-                      "quantity" = .x[[8]],
-                      "price" = .x[[9]],
-                      "fees" = .x[[10]],
-                      "net_amount" = .x[[12]],
-                      "currency_code" = .x[[13]],
-                      "settle_date" = as.Date(.x[[14]]),
-                      "trade_date" = as.Date(.x[[15]])
-                  )
-        ) |>
-        bind_rows()
+        suppressMessages(
+            response_json |>
+                map(
+                    ~pluck(.x)
+                ) |>
+                map_df(flatten_dfc)
+        )
 
     return(account_activity_df)
 }
