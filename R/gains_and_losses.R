@@ -25,43 +25,52 @@ get_realized_gains_losses <- function(account_number){
         content(as = "text", encoding = "UTF-8") |>
         parse_json()
 
+    securities <-
+        response_json |>
+        pluck("lot") |>
+        map(
+            ~pluck(.x, "security")
+        ) |>
+        map_dfr(flatten_df)
+
+    long_short <-
+        response_json |>
+        pluck("lot") |>
+        map(
+            ~pluck(.x, "longShortInd")
+        ) |>
+        unlist()
+
     buys <-
         response_json |>
         pluck("lot") |>
-        map_depth(1,
-                  ~(pluck(.x, "buy") |>
-                        flatten_df() |>
-                        mutate(
-                            symbol = pluck(.x, "security", "symbol"),
-                            buy_sell = "BUY",
-                            long_short = pluck(.x, "longShortInd")
-                        )
-                  ) |>
-                      relocate(buy_sell, symbol)
+        map(
+            ~pluck(.x, "buy")
         ) |>
-        bind_rows()
+        map_dfr(flatten_df) |>
+        mutate(securities,
+               long_short,
+               buy_sell = "BUY")
 
     sells <-
         response_json |>
         pluck("lot") |>
-        map_depth(1,
-                  ~(pluck(.x, "sell") |>
-                        flatten_df() |>
-                        mutate(
-                            symbol = pluck(.x, "security", "symbol"),
-                            buy_sell = "SELL",
-                            long_short = pluck(.x, "longShortInd"),
-                            short_term_gain_loss = pluck(.x, "stGainLoss"),
-                            long_term_gain_loss = pluck(.x, "ltGainLoss")
-                        )
-                  ) |>
-                      relocate(buy_sell, symbol)
+        map(
+            ~pluck(.x, "sell")
         ) |>
-        bind_rows()
+        map_dfr(flatten_df) |>
+        mutate(securities,
+               long_short,
+               long_term_gain_loss = get_gain_loss_by_term(json_response = response_json,
+                                                           "long"),
+               short_term_gain_loss = get_gain_loss_by_term(json_response = response_json,
+                                                            "short"),
+               buy_sell = "SELL"
+        )
 
-    realized_gain_loss_df <- bind_rows(buys, sells)
+    realized_gain_loss <- bind_rows(buys, sells) |> relocate(symbol, buy_sell)
 
-    return(realized_gain_loss_df)
+    return(realized_gain_loss)
 }
 
 #' Get the open positions in your portfolio.
@@ -91,21 +100,33 @@ get_open_positions <- function(account_number){
         content(as = "text", encoding = "UTF-8") |>
         parse_json()
 
+    securities <-
+        response_json |>
+        pluck("lot") |>
+        map(
+            ~pluck(.x, "security")
+        ) |>
+        map_dfr(flatten_df)
+
+    long_short <-
+        response_json |>
+        pluck("lot") |>
+        map(
+            ~pluck(.x, "longShortInd")
+        ) |>
+        unlist()
 
     open_positions <-
         response_json |>
         pluck("lot") |>
-        map_depth(1,
-                  ~(pluck(.x, "buy") |>
-                        flatten_df() |>
-                        mutate(
-                            symbol = pluck(.x, "security", "symbol"),
-                            buy_sell = "BUY"
-                            )
-                  ) |>
-                      relocate(buy_sell, symbol)
+        map(
+            ~pluck(.x, "buy")
         ) |>
-        bind_rows()
+        map_dfr(flatten_df) |>
+        mutate(securities,
+               long_short,
+               buy_sell = "BUY") |>
+        relocate(symbol, buy_sell)
 
     return(open_positions)
 }
