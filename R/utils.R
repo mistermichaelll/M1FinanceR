@@ -11,7 +11,7 @@ get_gain_loss_by_term <- function(json_response,
         "long" = "ltGainLoss"
     )
 
-    response_json |>
+    json_response |>
         pluck("lot") |>
         map(
             ~pluck(.x, short_or_long)
