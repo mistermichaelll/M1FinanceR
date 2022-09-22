@@ -5,34 +5,35 @@
 #' @param end_date a string containing the end date for the activity export.
 #'
 get_account_activity <- function(account_number, start_date, end_date){
-    url <- paste0(
-        "https://api.apexclearing.com/activities-provider/api/v1/activities/",
-        taxable,
-        "?activityType=TRADES&activityType=MONEY_MOVEMENTS&activityType=POSITION_ADJUSTMENTS&",
-        "endDate=", end_date,
-        "&startDate=", start_date
+  url <- paste0(
+    "https://api.apexclearing.com/activities-provider/api/v1/activities/",
+    taxable,
+    "?activityType=TRADES&activityType=MONEY_MOVEMENTS&activityType=POSITION_ADJUSTMENTS&",
+    "endDate=", end_date,
+    "&startDate=", start_date
+  )
+
+  response <-
+    GET(
+      url,
+      add_headers(
+        Cookie = Sys.getenv("APEX_token")
+      )
     )
 
-    response <-
-        GET(url,
-            add_headers(
-                Cookie = Sys.getenv("APEX_token")
-            )
-        )
+  response_json <-
+    response |>
+    content(as = "text", encoding = "UTF-8") |>
+    parse_json()
 
-    response_json <-
-        response |>
-        content(as = "text", encoding = "UTF-8") |>
-        parse_json()
+  account_activity_df <-
+    suppressMessages(
+      response_json |>
+        map(
+          ~pluck(.x)
+        ) |>
+        map_df(flatten_dfc)
+    )
 
-    account_activity_df <-
-        suppressMessages(
-            response_json |>
-                map(
-                    ~pluck(.x)
-                ) |>
-                map_df(flatten_dfc)
-        )
-
-    return(account_activity_df)
+  return(account_activity_df)
 }

@@ -14,39 +14,42 @@
 #' get_APEX_auth_token(username = "username", password = "password")
 #' get_APEX_auth_token() # RStudio prompts the user for their login
 get_APEX_auth_token <- function(username, password){
-    if(missing(username) | missing(password)){
-        username <- rstudioapi::askForSecret("APEX Username")
-        password <- rstudioapi::askForSecret("APEX Password")
-    }
+  if(missing(username) | missing(password)){
+    username <- rstudioapi::askForSecret("APEX Username")
+    password <- rstudioapi::askForSecret("APEX Password")
+  }
 
-    url <- "https://api.apexclearing.com/legit/api/v2/session"
-    request_body <-
-        paste0(
-            '{"user":"","password":"',
-            password,
-            '","username":"',
-            username,
-            '"}'
-        )
+  url <- "https://api.apexclearing.com/legit/api/v2/session"
+  request_body <-
+    paste0(
+      '{"user":"","password":"',
+      password,
+      '","username":"',
+      username,
+      '"}'
+    )
 
-    response <- POST(url,
-                 add_headers(
-                     .headers = c("Content-Type" = "application/json;charset=UTF-8")
-                 ),
-                 body = request_body)
+  response <-
+    POST(
+      url,
+      add_headers(
+        .headers = c("Content-Type" = "application/json;charset=UTF-8")
+      ),
+      body = request_body
+    )
 
-    if(response$status_code != 200){
-        stop(
-            sprintf("ERROR: response returned status code %s. Check your credentials and try again.",
-                    response$status_code)
-        )
-    }
+  if (response$status_code != 200) {
+    stop(
+      sprintf("ERROR: response returned status code %s. Check your credentials and try again.",
+              response$status_code)
+    )
+  }
 
-    token <-
-        response |>
-        pluck("cookies") |>
-        filter(name == "apex_jwt") |>
-        pull(value)
+  token <-
+    response |>
+    pluck("cookies") |>
+    filter(name == "apex_jwt") |>
+    pull(value)
 
-    Sys.setenv("APEX_token" = token)
+  Sys.setenv("APEX_token" = token)
 }
