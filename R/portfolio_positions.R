@@ -6,6 +6,9 @@
 #' This function returns top-level information about a user's portfolio, including the market value
 #' and the number of shares they own.
 #'
+#' @importFrom httr GET add_headers content
+#' @importFrom purrr pluck map_df flatten_df
+#' @importFrom jsonlite parse_json
 get_portfolio_positions <- function(account_number){
   url <- sprintf(
     "https://api.apexclearing.com/margin-provider/api/v1/positions/%s",
