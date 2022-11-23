@@ -8,7 +8,7 @@
 #' @return
 #' a named list with a user's credentials
 get_credentials <- function() {
-  if (interactive()) {
+  if (isTRUE(interactive())) {
     username <- askForSecret("APEX Username")
     password <- askForSecret("APEX Password")
   }
