@@ -93,11 +93,8 @@ get_realized_gains_losses <- function(account_number) {
       buy_sell = "SELL"
     )
 
-  realized_gain_loss <-
-    bind_rows(buys, sells) |>
+  bind_rows(buys, sells) |>
     relocate(.data$symbol, .data$buy_sell)
-
-  return(realized_gain_loss)
 }
 
 #' Get the open positions in your portfolio.
@@ -144,8 +141,7 @@ get_open_positions <- function(account_number) {
     ) |>
     unlist()
 
-  open_positions <-
-    response_json |>
+  response_json |>
     pluck("lot") |>
     map(
       ~pluck(.x, "buy")
@@ -157,6 +153,4 @@ get_open_positions <- function(account_number) {
       buy_sell = "BUY"
     ) |>
     relocate(.data$symbol, .data$buy_sell)
-
-  return(open_positions)
 }
