@@ -23,6 +23,8 @@ If a user is uncomfortable writing out their username/password in an R file as p
 RStudio will prompt the user to enter their username and password. This is not stored anywhere once the function is finished running - only the AUTH_token is.
 }
 \examples{
+\dontrun{
 get_APEX_auth_token(username = "username", password = "password")
 get_APEX_auth_token() # RStudio prompts the user for their login
+}
 }

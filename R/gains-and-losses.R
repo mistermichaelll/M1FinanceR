@@ -2,7 +2,7 @@
 #'
 #' @param account_number a user's M1 Finance account number.
 #'
-get_realized_gains_losses <- function(account_number){
+get_realized_gains_losses <- function(account_number) {
   url <-
     sprintf(
       "https://api.apexclearing.com/taxman/api/v1/gainloss/%s/realized?fromdate=19000101&page=1&pagesize=10000",
@@ -70,7 +70,9 @@ get_realized_gains_losses <- function(account_number){
       buy_sell = "SELL"
     )
 
-  realized_gain_loss <- bind_rows(buys, sells) |> relocate(symbol, buy_sell)
+  realized_gain_loss <-
+    bind_rows(buys, sells) |>
+    relocate(.data$symbol, .data$buy_sell)
 
   return(realized_gain_loss)
 }
@@ -79,7 +81,7 @@ get_realized_gains_losses <- function(account_number){
 #'
 #' @param account_number a user's M1 Finance account number.
 #'
-get_open_positions <- function(account_number){
+get_open_positions <- function(account_number) {
   url <-
     sprintf(
       "https://api.apexclearing.com/taxman/api/v1/gainloss/%s/unrealized?fromdate=19000101&page=1&pagesize=10000",
@@ -131,7 +133,7 @@ get_open_positions <- function(account_number){
       long_short,
       buy_sell = "BUY"
     ) |>
-    relocate(symbol, buy_sell)
+    relocate(.data$symbol, .data$buy_sell)
 
   return(open_positions)
 }

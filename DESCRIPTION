@@ -6,10 +6,20 @@ Author: Michael Johnson
 Maintainer: Michael Johnson <mkjohnson@protonmail.com>
 Description: This package is an opinionated wrapper to APEX Clearing's individual 
     API.
-License: MIT
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: httr, dplyr, purrr
-Exports: get_APEX_auth_token, get_portfolio_positions, get_realized_gains_losses, get_open_positions, 
-    get_account_activity
+Imports: 
+  httr, 
+  dplyr, 
+  purrr, 
+  rlang,
+  jsonlite, 
+  rstudioapi
+Exports: 
+  get_APEX_auth_token, 
+  get_portfolio_positions, 
+  get_realized_gains_losses, 
+  get_open_positions, 
+  get_account_activity
 RoxygenNote: 7.2.1

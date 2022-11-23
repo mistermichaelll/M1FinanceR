@@ -3,8 +3,10 @@
 #' @param json_response the API response in JSON format.
 #' @param short_or_long one of either "short" or "long" for the term in which gains are evaluated.
 #'
-get_gain_loss_by_term <- function(json_response,
-                                  short_or_long = c("short", "long")){
+get_gain_loss_by_term <- function(
+    json_response,
+    short_or_long = c("short", "long")
+  ) {
   short_or_long <- switch(
     short_or_long,
     "short" = "stGainLoss",
