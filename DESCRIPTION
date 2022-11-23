@@ -2,11 +2,16 @@ Package: m1financeR
 Type: Package
 Title: API-wrapper to APEX Clearing's Individual API
 Version: 0.1.0
-Author: Michael Johnson
-Maintainer: Michael Johnson <mkjohnson@protonmail.com>
+Authors@R: 
+  person(
+    "Michael", 
+    "Johnson", 
+    email = "mkjohnson@protonmail.com", 
+    role = c("aut", "cre")
+  )
 Description: This package is an opinionated wrapper to APEX Clearing's individual 
     API.
-License: file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
