@@ -44,7 +44,7 @@ get_credentials <- function() {
 #' get_APEX_auth_token(username = "username", password = "password")
 #' get_APEX_auth_token() # RStudio prompts the user for their login
 #' }
-get_APEX_auth_token <- function(username, password){
+get_APEX_auth_token <- function(username, password) {
   credentials <- get_credentials()
 
   url <- "https://api.apexclearing.com/legit/api/v2/session"

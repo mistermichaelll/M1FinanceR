@@ -2,7 +2,7 @@
 #'
 #' @param account_number a user's M1 Finance account number.
 #'
-get_realized_gains_losses <- function(account_number){
+get_realized_gains_losses <- function(account_number) {
   url <-
     sprintf(
       "https://api.apexclearing.com/taxman/api/v1/gainloss/%s/realized?fromdate=19000101&page=1&pagesize=10000",
@@ -81,7 +81,7 @@ get_realized_gains_losses <- function(account_number){
 #'
 #' @param account_number a user's M1 Finance account number.
 #'
-get_open_positions <- function(account_number){
+get_open_positions <- function(account_number) {
   url <-
     sprintf(
       "https://api.apexclearing.com/taxman/api/v1/gainloss/%s/unrealized?fromdate=19000101&page=1&pagesize=10000",
