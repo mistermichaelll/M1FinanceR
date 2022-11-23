@@ -9,7 +9,15 @@ Description: This package is an opinionated wrapper to APEX Clearing's individua
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Imports: httr, dplyr, purrr
-Exports: get_APEX_auth_token, get_portfolio_positions, get_realized_gains_losses, get_open_positions, 
-    get_account_activity
+Imports: 
+  httr, 
+  dplyr, 
+  purrr, 
+  rlang
+Exports: 
+  get_APEX_auth_token, 
+  get_portfolio_positions, 
+  get_realized_gains_losses, 
+  get_open_positions, 
+  get_account_activity
 RoxygenNote: 7.2.1
