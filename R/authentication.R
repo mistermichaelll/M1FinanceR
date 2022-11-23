@@ -50,8 +50,8 @@ get_APEX_auth_token <- function(username, password){
   token <-
     response |>
     pluck("cookies") |>
-    filter(name == "apex_jwt") |>
-    pull(value)
+    filter(.data$name == "apex_jwt") |>
+    pull(.data$value)
 
   Sys.setenv("APEX_token" = token)
 }

@@ -3,6 +3,7 @@
 #' @importFrom purrr map_depth flatten_df flatten_dfc map_df map_dfr map flatten pluck
 #' @importFrom jsonlite parse_json
 #' @importFrom rstudioapi askForSecret
+#' @importFrom rlang .data
 #' @export get_portfolio_positions
 #' @export get_open_positions
 #' @export get_realized_gains_losses

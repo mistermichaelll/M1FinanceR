@@ -70,7 +70,9 @@ get_realized_gains_losses <- function(account_number){
       buy_sell = "SELL"
     )
 
-  realized_gain_loss <- bind_rows(buys, sells) |> relocate(symbol, buy_sell)
+  realized_gain_loss <-
+    bind_rows(buys, sells) |>
+    relocate(.data$symbol, .data$buy_sell)
 
   return(realized_gain_loss)
 }
@@ -131,7 +133,7 @@ get_open_positions <- function(account_number){
       long_short,
       buy_sell = "BUY"
     ) |>
-    relocate(symbol, buy_sell)
+    relocate(.data$symbol, .data$buy_sell)
 
   return(open_positions)
 }
