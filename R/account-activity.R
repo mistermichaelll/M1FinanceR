@@ -7,7 +7,7 @@
 get_account_activity <- function(account_number, start_date, end_date){
   url <- paste0(
     "https://api.apexclearing.com/activities-provider/api/v1/activities/",
-    taxable,
+    account_number,
     "?activityType=TRADES&activityType=MONEY_MOVEMENTS&activityType=POSITION_ADJUSTMENTS&",
     "endDate=", end_date,
     "&startDate=", start_date
