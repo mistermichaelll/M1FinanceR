@@ -27,10 +27,10 @@ get_account_activity <- function(account_number, start_date, end_date) {
     parse_json()
 
   suppressMessages(
-      response_json |>
-        map(
-          ~pluck(.x)
-        ) |>
-        map_df(flatten_dfc)
+    response_json |>
+      map(
+        ~pluck(.x)
+      ) |>
+      map_df(flatten_dfc)
   )
 }
