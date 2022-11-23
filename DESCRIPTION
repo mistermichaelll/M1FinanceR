@@ -6,7 +6,7 @@ Author: Michael Johnson
 Maintainer: Michael Johnson <mkjohnson@protonmail.com>
 Description: This package is an opinionated wrapper to APEX Clearing's individual 
     API.
-License: MIT
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
