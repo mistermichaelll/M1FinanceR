@@ -1,3 +1,26 @@
+#' Helper function to clean up code which generates realized gains and losses.
+#'
+#' @param json_response the API response in JSON format.
+#' @param short_or_long one of either "short" or "long" for the term in which gains are evaluated.
+#'
+get_gain_loss_by_term <- function(
+    json_response,
+    short_or_long = c("short", "long")
+) {
+  short_or_long <- switch(
+    short_or_long,
+    "short" = "stGainLoss",
+    "long" = "ltGainLoss"
+  )
+
+  json_response |>
+    pluck("lot") |>
+    map(
+      ~pluck(.x, short_or_long)
+    ) |>
+    unlist()
+}
+
 #' Get realized gains and losses for a given portfolio.
 #'
 #' @param account_number a user's M1 Finance account number.
@@ -25,6 +48,11 @@ get_realized_gains_losses <- function(account_number) {
     response |>
     content(as = "text", encoding = "UTF-8") |>
     parse_json()
+
+  if (isTRUE(response_json[["pageSize"]] == 0)) {
+    message('Response had pageSize of 0, no realized/gains losses found.\nThis may indicate that no "SELL" activities have ocurred in this account.')
+    return(tibble())
+  }
 
   securities <-
     response_json |>
@@ -70,11 +98,8 @@ get_realized_gains_losses <- function(account_number) {
       buy_sell = "SELL"
     )
 
-  realized_gain_loss <-
-    bind_rows(buys, sells) |>
+  bind_rows(buys, sells) |>
     relocate(.data$symbol, .data$buy_sell)
-
-  return(realized_gain_loss)
 }
 
 #' Get the open positions in your portfolio.
@@ -121,8 +146,7 @@ get_open_positions <- function(account_number) {
     ) |>
     unlist()
 
-  open_positions <-
-    response_json |>
+  response_json |>
     pluck("lot") |>
     map(
       ~pluck(.x, "buy")
@@ -134,6 +158,4 @@ get_open_positions <- function(account_number) {
       buy_sell = "BUY"
     ) |>
     relocate(.data$symbol, .data$buy_sell)
-
-  return(open_positions)
 }

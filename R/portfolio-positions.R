@@ -32,10 +32,7 @@ get_portfolio_positions <- function(account_number) {
     content(as = "text", encoding = "UTF-8") |>
     parse_json()
 
-  portfolio_positions <-
-    response_json |>
+  response_json |>
     pluck(1, "positions") |>
     map_df(flatten_df)
-
-  return(portfolio_positions)
 }
