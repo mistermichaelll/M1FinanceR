@@ -15,8 +15,8 @@
 #' get_APEX_auth_token() # RStudio prompts the user for their login
 get_APEX_auth_token <- function(username, password){
   if(missing(username) | missing(password)){
-    username <- rstudioapi::askForSecret("APEX Username")
-    password <- rstudioapi::askForSecret("APEX Password")
+    username <- askForSecret("APEX Username")
+    password <- askForSecret("APEX Password")
   }
 
   url <- "https://api.apexclearing.com/legit/api/v2/session"
