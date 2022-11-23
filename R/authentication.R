@@ -11,8 +11,10 @@
 #' @param password the password for your APEX Clearing account.
 #' @return a global environment variable called APEX_token which is used in the other helper functions.
 #' @examples
+#' \dontrun{
 #' get_APEX_auth_token(username = "username", password = "password")
 #' get_APEX_auth_token() # RStudio prompts the user for their login
+#' }
 get_APEX_auth_token <- function(username, password){
   if(missing(username) | missing(password)){
     username <- askForSecret("APEX Username")
