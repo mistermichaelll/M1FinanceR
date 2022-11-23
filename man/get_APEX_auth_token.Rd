@@ -4,12 +4,7 @@
 \alias{get_APEX_auth_token}
 \title{Get an authorized token to use during your R session.}
 \usage{
-get_APEX_auth_token(username, password)
-}
-\arguments{
-\item{username}{the username for your APEX Clearing account.}
-
-\item{password}{the password for your APEX Clearing account.}
+get_APEX_auth_token()
 }
 \value{
 a global environment variable called APEX_token which is used in the other helper functions.
@@ -24,7 +19,6 @@ RStudio will prompt the user to enter their username and password. This is not s
 }
 \examples{
 \dontrun{
-get_APEX_auth_token(username = "username", password = "password")
 get_APEX_auth_token() # RStudio prompts the user for their login
 }
 }

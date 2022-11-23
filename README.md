@@ -20,9 +20,9 @@ Once you have your username and password, and `m1financeR` installed, you're rea
 ## Authentication 
 At the beginning of your script, call the `get_APEX_auth_token()` function. 
 
-If you are using RStudio, leaving the arguments to this function blank will prompt you to enter your username and password. The function will create an environment variable called `APEX_token` which is used for authentication.
+If you are using RStudio, the function will prompt you to enter your username and password. Otherwise, this function will search `.Renviron` for `APEX_USER` and `APEX_PASS`. You can set these for non-interactive sessions if you choose.
 
-Optionally, you can define your username and password directly in the function arguments. **I highly recommend looking into alternatives to writing these in plaintext in an .R file.** For example, [Keyring](https://github.com/r-lib/keyring) is an option for managing secrets in R.
+Running this function creates an environment variable called `APEX_token` which is used for authentication for the rest of the session.
 
 # Example of Use
 ```R
@@ -31,7 +31,7 @@ library(m1financeR)
 library(dplyr)
 
 ## authenticate ----
-get_APEX_auth_token(username = "myprettyusername1", password = "pleasedontwritethisinplaintext9")
+get_APEX_auth_token()
 
 ## get the realized gains/losses for your portfolio -----
 realized_gain_loss <- get_realized_gains_losses("AB1234")
@@ -59,11 +59,7 @@ realized_gain_loss |>
 # Extendability to Other Brokers
 Though the intended use of this package is for users of M1 Finance, this package is a wrapper to the APEX Clearing API. That means if APEX is your broker's clearing firm and custodial bank, it's likely that this package will operate in the same way for that broker.
 
-# A Note on Breaking Changes
-## This Package is Actively Under Development!
-I'll try not to break things as I move along.
-
-## APEX Clearing's API Support
+# APEX Clearing's API Support
 APEX's Individual API is not publicly documented. This package was constructed through careful analysis of network activity when accessing APEX's site. 
 
 Thus, it is entirely possible that APEX may introduce a breaking change to the API in the future. Please keep this in mind as you write scripts based on this package. 

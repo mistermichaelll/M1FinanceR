@@ -13,12 +13,13 @@ get_credentials <- function() {
     password <- askForSecret("APEX Password")
   }
   else {
+    message("checking .Renviron for username and password")
     username <- Sys.getenv("APEX_USER")
     password <- Sys.getenv("APEX_PASS")
   }
 
   if (username == "" & password == ""){
-    stop("Could not find username and password. Please set up the following environment variables for non-interactive sessions: APEX_USER, APEX_PASS")
+    stop("could not find username and password. Please set up the following environment variables for non-interactive sessions: APEX_USER, APEX_PASS")
   }
 
   list(
@@ -36,15 +37,12 @@ get_credentials <- function() {
 #' If a user is uncomfortable writing out their username/password in an R file as plaintext, the function can be left blank and
 #' RStudio will prompt the user to enter their username and password. This is not stored anywhere once the function is finished running - only the AUTH_token is.
 #'
-#' @param username the username for your APEX Clearing account.
-#' @param password the password for your APEX Clearing account.
 #' @return a global environment variable called APEX_token which is used in the other helper functions.
 #' @examples
 #' \dontrun{
-#' get_APEX_auth_token(username = "username", password = "password")
 #' get_APEX_auth_token() # RStudio prompts the user for their login
 #' }
-get_APEX_auth_token <- function(username, password) {
+get_APEX_auth_token <- function() {
   credentials <- get_credentials()
 
   url <- "https://api.apexclearing.com/legit/api/v2/session"
