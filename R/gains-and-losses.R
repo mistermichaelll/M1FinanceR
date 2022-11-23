@@ -49,6 +49,11 @@ get_realized_gains_losses <- function(account_number) {
     content(as = "text", encoding = "UTF-8") |>
     parse_json()
 
+  if (isTRUE(response_json[["pageSize"]] == 0)) {
+    message('Response had pageSize of 0, no realized/gains losses found.\nThis may indicate that no "SELL" activities have ocurred in this account.')
+    return(tibble())
+  }
+
   securities <-
     response_json |>
     pluck("lot") |>
