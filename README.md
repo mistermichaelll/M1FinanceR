@@ -1,3 +1,4 @@
+# DEPRECATED
 # m1financeR - analyze your M1 Finance portfolio in R
 [M1 Finance](https://www.m1finance.com/) does not have its own API through which users can access and download things like realized/unrealized gain. According to M1 Finance:
 
